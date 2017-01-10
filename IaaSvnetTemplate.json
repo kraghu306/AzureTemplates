@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      
+    },
+  "variables": {
+    "dem-ramvnetPrefix": "10.0.0.0/16",
+    "dem-ramvnetSubnet1Name": "Subnet-1",
+    "dem-ramvnetSubnet1Prefix": "10.0.0.0/24",
+    "dem-ramvnetSubnet2Name": "Subnet-2",
+    "dem-ramvnetSubnet2Prefix": "10.0.1.0/24",
+    "dem-ramvnetSubnet3Name": "Subnet-2",
+    "dem-ramvnetSubnet3Prefix": "10.0.1.0/24"
+  },
+    "resources": [
+        {
+            "name": "dem-ramvnet",
+            "type": "Microsoft.Network/virtualNetworks",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "dem-ramvnet"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('dem-ramvnetPrefix')]"
+                    ]
+                },
+              "subnets": [
+                {
+                  "name": "[variables('dem-ramvnetSubnet1Name')]",
+                  "properties": {
+                    "addressPrefix": "[variables('dem-ramvnetSubnet1Prefix')]"
+                  }
+                },
+                {
+                  "name": "[variables('dem-ramvnetSubnet2Name')]",
+                  "properties": {
+                    "addressPrefix": "[variables('dem-ramvnetSubnet2Prefix')]"
+                  }
+                },
+                {
+                  "name": "[variables('dem-ramvnetSubnet3Name')]",
+                  "properties": {
+                    "addressPrefix": "[variables('dem-ramvnetSubnet3Prefix')]"
+                  }
+                }
+              ]
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

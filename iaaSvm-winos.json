@@ -1,0 +1,112 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "iaasvm-winosName": {
+            "type": "string",
+			"defaultValue": "demo-Win-IaaS",
+            "minLength": 1
+        },
+        "iaasvm-winosAdminUserName": {
+            "type": "string",
+			"defaultValue": "<userName>",
+            "minLength": 1
+        },
+        "iaasvm-winosAdminPassword": {
+            "type": "securestring"
+        },
+        "iaasvm-winosWindowsOSVersion": {
+            "type": "string",
+            "defaultValue": "2012-R2-Datacenter",
+            "allowedValues": [
+                "2008-R2-SP1",
+                "2012-Datacenter",
+                "2012-R2-Datacenter",
+                "Windows-Server-Technical-Preview"
+            ]
+        }
+    },
+    "variables": {
+        "iaasvm-winosImagePublisher": "MicrosoftWindowsServer",
+        "iaasvm-winosImageOffer": "WindowsServer",
+        "iaasvm-winosOSDiskName": "iaasvm-winosOSDisk",
+        "iaasvm-winosVmSize": "Standard_D1",
+        "iaasvm-winosVnetID": "/subscriptions/cdbad274-f0e6-402a-87c7-e4efb1de3c07/resourceGroups/ram-image-demo/providers/Microsoft.Network/virtualNetworks/ramvnet",
+        "iaasvm-winosSubnetRef": "[concat(variables('iaasvm-winosVnetID'), '/subnets/', 'Sub-1')]",
+        "iaasvm-winosStorageAccountContainerName": "vhds",
+        "iaasvm-winosNicName": "[concat(parameters('iaasvm-winosName'), 'NetworkInterface')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('iaasvm-winosNicName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "location": "westus",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [ ],
+            "tags": {
+                "displayName": "iaasvm-winosNic"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('iaasvm-winosSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "[parameters('iaasvm-winosName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "location": "westus",
+            "apiVersion": "2015-06-15",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkInterfaces', variables('iaasvm-winosNicName'))]"
+            ],
+            "tags": {
+                "displayName": "iaasvm-winos"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[variables('iaasvm-winosVmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('iaasvm-winosName')]",
+                    "adminUsername": "[parameters('iaasvm-winosAdminUsername')]",
+                    "adminPassword": "[parameters('iaasvm-winosAdminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('iaasvm-winosImagePublisher')]",
+                        "offer": "[variables('iaasvm-winosImageOffer')]",
+                        "sku": "[parameters('iaasvm-winosWindowsOSVersion')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "iaasvm-winosOSDisk",
+                        "vhd": {
+                            "uri": "[concat('https://', 'ramimg', '.blob.core.windows.net/', variables('iaasvm-winosStorageAccountContainerName'), '/', variables('iaasvm-winosOSDiskName'), '.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('iaasvm-winosNicName'))]"
+                        }
+                    ]
+                }
+            }
+        }
+        
+    ],
+    "outputs": {
+    }
+}
