@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountNamePrefix": {
+      "value": "smeprfixs"
+    },
+    "adminUserName": {
+      "value": "myadmin"
+    },
+    "adminPassword": {
+      "value": "A=a1234567890"
+    },
+    "dnsLabelPrefix": {
+      "value": "smeprfixs"
+    },
+    "vmSize": {
+      "value": "Standard_DS2_V2"
+    },
+    "vnetGroup" : {
+      "value": "armportal"
+    },
+    "vnetName" : {
+      "value": "armportal-vnet"
+    },
+    "subnetName" : {
+      "value": "Sub-1"
+    }
+  }
+}
