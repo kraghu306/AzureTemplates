@@ -1,0 +1,62 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "vnetName": {
+        "type": "string",
+        "defaultValue": "RamVNet",
+        "metadata": {
+          "description": "Name for the new VNet."
+        }
+      },
+      "vnetPrefix": {
+        "type": "string",
+        "defaultValue": "192.168.0.0/16",
+        "metadata": {
+          "description": "CIDR prefix for the VNet address space."
+        }
+      },
+      "frontEndSubnetName": {
+        "type": "string",
+        "defaultValue": "FrontEnd",
+        "metadata": {
+          "description": "Name for the front end subnet."
+        }
+      },
+      "frontEndSubnetPrefix": {
+        "type": "string",
+        "defaultValue": "192.168.1.0/24",
+        "metadata": {
+          "description": "CIDR address prefix for the front end subnet."
+        }
+      },
+      "backEndSubnetName": {
+        "type": "string",
+        "defaultValue": "BackEnd",
+        "metadata": {
+          "description": "Name for the back end subnet."
+        }
+      },
+      "backEndSubnetPrefix": {
+        "type": "string",
+        "defaultValue": "192.168.2.0/24",
+        "metadata": {
+          "description": "CIDR address prefix for the back end subnet."
+        }
+      },
+      "frontEndNSGName": {
+        "type": "string",
+        "defaultValue": "NSG-BackEnd",
+        "metadata": {
+          "description": "Name for the NSG used to allow remote RDP"
+        }
+      },
+      "backEndNSGName": {
+        "type": "string",
+        "defaultValue": "NSG-FrontEnd",
+        "metadata": {
+          "description": "Name for the NSG used to allow access to web servers on port 80"
+        }
+      }
+   }
+}
